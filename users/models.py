@@ -15,7 +15,7 @@ ROLE_CHOICES = (
 class CustomUser(AbstractUser):
     phone = models.CharField(max_length=10, unique=True)
     role = models.IntegerField(default=3, choices=ROLE_CHOICES, null=True)
-    company = models.CharField(max_length=20, blank=True, null=True)
+    company_user = models.CharField(verbose_name='Company', max_length=20, blank=True, null=True)
     email = models.EmailField(
         validators=[validators.validate_email],
         unique=True,

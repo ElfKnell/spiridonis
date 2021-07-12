@@ -10,7 +10,7 @@ class News(models.Model):
     date_create = models.DateTimeField(auto_now_add=True)
     text = models.TextField(verbose_name='Text')
 
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    users = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.post

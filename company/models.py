@@ -12,7 +12,7 @@ class Company(models.Model):
     address = models.CharField(verbose_name='Address', null=True, max_length=150)
     operating_mode = models.CharField(verbose_name='Operating mode', max_length=120, null=True)
 
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    users = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name_company
