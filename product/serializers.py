@@ -6,9 +6,9 @@ from rating.serializers import RatingSerializer, RatingListSerializer
 
 
 class ProductSerializers(serializers.ModelSerializer):
-    attributes = AttributeValueSerializer(many=True)
-    reviews = ReviewsDetailSerializers(many=True)
-    rating = RatingSerializer(many=True)
+    attributes = AttributeValueSerializer(many=True, required=False)
+    reviews = ReviewsDetailSerializers(many=True, required=False)
+    rating = RatingSerializer(many=True, required=False)
 
     class Meta:
         model = Product
@@ -28,12 +28,12 @@ class ProductDetailSerializers(serializers.ModelSerializer):
 
 class ProductListSerializer(serializers.ModelSerializer):
     attributes = AttributeValueListSerializer(many=True)
-    rating_user = serializers.BooleanField(default=False)
+    #rating_user = serializers.BooleanField(default=False)
     middle_star = serializers.IntegerField(default=0)
     rating = RatingListSerializer(many=True)
 
     class Meta:
         model = Product
         fields = ('id', 'name_product', 'article', 'photo', 'price', 'opt_price',
-                  'small_opt_price', 'sale_price', 'attributes', 'rating_user',
+                  'small_opt_price', 'sale_price', 'attributes',
                   'middle_star', 'rating')

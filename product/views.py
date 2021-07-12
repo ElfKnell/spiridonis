@@ -1,4 +1,5 @@
-from django.db.models import Q, Count
+from django.db.models import Avg
+from django.db.models.functions import Round
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
@@ -19,12 +20,7 @@ class ProductListView(generics.ListAPIView):
     filter_backends = [SearchFilter, ]
     search_fields = ['name_product', 'model', 'article', ]
     pagination_by = 25
-
-    def get_queryset(self, request):
-
-        return Product.objects.all().annotate(
-            rating_user=Count(Q("rating", filter=Q(rating__ip=get_client_ip(request))))
-        )
+    queryset = Product.objects.annotate(middle_star=Round(Avg('rating__star')))
 
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
