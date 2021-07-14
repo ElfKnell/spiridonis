@@ -38,6 +38,8 @@ class Product(models.Model):
                                           blank=True, null=True)
     sale_price = models.DecimalField(verbose_name='Sale price', blank=True,
                                      null=True, decimal_places=2, max_digits=10)
+    drop_price = models.DecimalField(verbose_name='Dropshipper price', decimal_places=2, max_digits=10,
+                                     blank=True, null=True)
     count = models.IntegerField(verbose_name='Count', default=0)
     is_new = models.BooleanField(verbose_name='New', default=False)
     is_sale = models.BooleanField(verbose_name='Sale', default=False)
@@ -47,9 +49,8 @@ class Product(models.Model):
     status = models.IntegerField(verbose_name='Status', default=0, choices=STATUS_CHOICE)
     date_create = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-
     related_products = models.ManyToManyField('self', blank=True)
-    manufacturer = models.OneToOneField(Manufacturer, blank=True, null=True, on_delete=models.SET_NULL)
+    manufacturer = models.ForeignKey(Manufacturer, blank=True, null=True, on_delete=models.SET_NULL)
 
     category = models.ManyToManyField(Category, blank=True)
     users = models.ForeignKey(User, on_delete=models.PROTECT)

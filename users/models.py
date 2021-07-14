@@ -8,7 +8,8 @@ ROLE_CHOICES = (
     (2, 'editor'),
     (3, 'customer'),
     (4, 'wholesaler'),
-    (5, 'retail wholesaler')
+    (5, 'retail wholesaler'),
+    (6, 'dropshipper'),
 )
 
 

@@ -1,10 +1,13 @@
+from django.contrib.auth.models import AnonymousUser
 from django.db.models import Avg
 from django.db.models.functions import Round
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
 
-from .serializers import ProductSerializers, ProductDetailSerializers, ProductListSerializer
+from .serializers import ProductSerializers, ProductDetailSerializers, ProductListSerializer, \
+    ProductListCustomerSerializer, ProductListWholesalerSerializer, ProductListRetailWholesalerSerializer, \
+    ProductListDropshipperSerializer, ProductDetailCustomerSerializers
 from users.permissions import IsEditorUser
 from .models import Product
 from rating.service import get_client_ip
@@ -12,7 +15,7 @@ from rating.service import get_client_ip
 
 class ProductCreateView(generics.CreateAPIView):
     serializer_class = ProductSerializers
-    #permission_classes = [IsEditorUser]
+    permission_classes = [IsEditorUser]
 
 
 class ProductListView(generics.ListAPIView):
@@ -22,9 +25,40 @@ class ProductListView(generics.ListAPIView):
     pagination_by = 25
     queryset = Product.objects.annotate(middle_star=Round(Avg('rating__star')))
 
+    def get_serializer_class(self):
+        if isinstance(self.request.user, AnonymousUser):
+            return ProductListCustomerSerializer
+        else:
+            if self.request.user.role == 2:
+                return ProductListSerializer
+            if self.request.user.role == 3:
+                return ProductListCustomerSerializer
+            if self.request.user.role == 4:
+                return ProductListWholesalerSerializer
+            if self.request.user.role == 5:
+                return ProductListRetailWholesalerSerializer
+            if self.request.user.role == 6:
+                return ProductListDropshipperSerializer
+
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = ProductDetailSerializers
-    queryset = Product.objects.all()
-    permission_classes = [IsEditorUser]
 
+    queryset = Product.objects.all()
+    queryset = Product.objects.annotate(middle_star=Round(Avg('rating__star')))
+
+    def get_serializer_class(self):
+        if isinstance(self.request.user, AnonymousUser):
+            return ProductDetailCustomerSerializers
+        else:
+            if self.request.user.role == 2:
+                return ProductDetailSerializers
+            if self.request.user.role == 3:
+                return ProductDetailCustomerSerializers
+            if self.request.user.role == 4:
+                return ProductListWholesalerSerializer
+            if self.request.user.role == 5:
+                return ProductListRetailWholesalerSerializer
+            if self.request.user.role == 6:
+                return ProductListDropshipperSerializer
+
+    permission_classes = [IsEditorUser, ]

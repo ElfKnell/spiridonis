@@ -16,6 +16,8 @@ class VProduct(models.Model):
                                     decimal_places=2, max_digits=10)
     small_opt_price = models.DecimalField(verbose_name='Small opt price', decimal_places=2, max_digits=10,
                                           blank=True, null=True)
+    drop_price = models.DecimalField(verbose_name='Dropshipper price', decimal_places=2, max_digits=10,
+                                     blank=True, null=True)
     sale_price = models.DecimalField(verbose_name='Sale price', blank=True,
                                      null=True, decimal_places=2, max_digits=10)
     weight = models.FloatField(verbose_name='Weight', blank=True, null=True)

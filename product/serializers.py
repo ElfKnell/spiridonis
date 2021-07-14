@@ -1,39 +1,114 @@
 from rest_framework import serializers
 from .models import Product
-from attibutes.serializers import AttributeValueSerializer, AttributeValueListSerializer
-from reviews.serializers import ReviewsDetailSerializers
-from rating.serializers import RatingSerializer, RatingListSerializer
+from attibutes.serializers import AttributeValueCustomerListSerializer, \
+    AttributeValueWholesalerListSerializer, AttributeValueRetailWholesalerListSerializer, \
+    AttributeValueDropshipperListSerializer, AttributeValueListSerializer, AttributeValueAllListSerializer
+from rating.serializers import RatingListSerializer
 
 
 class ProductSerializers(serializers.ModelSerializer):
-    attributes = AttributeValueSerializer(many=True, required=False)
-    reviews = ReviewsDetailSerializers(many=True, required=False)
-    rating = RatingSerializer(many=True, required=False)
 
     class Meta:
         model = Product
         fields = '__all__'
 
 
-class ProductDetailSerializers(serializers.ModelSerializer):
-
-    class Meta:
-        model = Product
-        fields = ('id', 'name_product', 'title', 'model', 'article',
-                  'description', 'meta_description', 'photo', 'price',
-                  'opt_price', 'small_opt_price', 'sale_price',
-                  'count', 'warehouse', 'new', 'related_products',
-                  'rating', 'sex', 'updated_on', 'category')
-
-
+# Відображення каталога товарів
 class ProductListSerializer(serializers.ModelSerializer):
-    attributes = AttributeValueListSerializer(many=True)
-    #rating_user = serializers.BooleanField(default=False)
+    attributes = AttributeValueAllListSerializer(many=True)
     middle_star = serializers.IntegerField(default=0)
     rating = RatingListSerializer(many=True)
 
     class Meta:
         model = Product
-        fields = ('id', 'name_product', 'article', 'photo', 'price', 'opt_price',
-                  'small_opt_price', 'sale_price', 'attributes',
-                  'middle_star', 'rating')
+        fields = '__all__'
+
+
+class ProductListCustomerSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product', 'article', 'photo', 'price',
+                  'sale_price', 'attributes', 'middle_star')
+
+
+class ProductListWholesalerSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product', 'article', 'photo', 'opt_price',
+                  'attributes', 'middle_star')
+
+
+class ProductListRetailWholesalerSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product', 'article', 'photo', 'small_opt_price',
+                  'attributes', 'middle_star')
+
+
+class ProductListDropshipperSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product', 'article', 'photo',
+                  'drop_price', 'attributes', 'middle_star')
+#Кінець відображення каталогу товарів
+
+
+#Відображення окремого товару
+class ProductDetailSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Product
+        exclude = ('date_create', 'updated_on')
+
+
+class ProductDetailCustomerSerializers(serializers.ModelSerializer):
+    attributes = AttributeValueCustomerListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        exclude = ('date_create', 'updated_on', 'users', 'opt_price', 'small_opt_price',
+                   'drop_price', 'is_new', 'is_variability', 'status', 'count')
+
+
+class ProductDetailWholesalerSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueWholesalerListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        exclude = ('date_create', 'updated_on', 'users', 'price', 'small_opt_price',
+                   'drop_price', 'sale_price', 'is_new', 'is_sale', 'is_variability', 'status', 'count')
+
+
+class ProductDetailRetailWholesalerSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueRetailWholesalerListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        exclude = ('date_create', 'updated_on', 'users', 'opt_price', 'price',
+                   'drop_price', 'sale_price', 'is_new', 'is_sale', 'is_variability', 'status', 'count')
+
+
+class ProductDetailDropshipperSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueDropshipperListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        exclude = ('date_create', 'updated_on', 'users', 'opt_price', 'small_opt_price',
+                   'price', 'sale_price', 'is_new', 'is_sale', 'is_variability', 'status', 'count')
+#Кінець відображення окремого товару
