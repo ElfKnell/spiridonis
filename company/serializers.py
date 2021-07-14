@@ -7,3 +7,10 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = '__all__'
+
+
+class CompanyListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Company
+        exclude = ('users', )

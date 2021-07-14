@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import CategorySerializer, CategoryDetailSerializer
+from .serializers import CategorySerializer, CategoryDetailSerializer, CategoryListSerializer
 from .models import Category
 from users.permissions import IsEditorUser
 
@@ -11,9 +11,8 @@ class CategoryCreateView(generics.CreateAPIView):
 
 
 class CategoryListView(generics.ListAPIView):
-    serializer_class = CategorySerializer
+    serializer_class = CategoryListSerializer
     queryset = Category.objects.all()
-    permission_classes = [IsEditorUser]
 
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):

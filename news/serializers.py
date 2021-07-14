@@ -7,3 +7,10 @@ class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = '__all__'
+
+
+class NewsListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = News
+        exclude = ('users',)

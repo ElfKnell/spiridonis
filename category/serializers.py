@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from product.serializers import ProductListSerializer
 from .models import Category
 
 
@@ -15,3 +17,11 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
         model = Category
         fields = ('id', 'name_category', 'photo', 'description', 'title', 'parent_category',
                   'filters.py', 'status', 'updated_on')
+
+
+class CategoryListSerializer(serializers.ModelSerializer):
+    product = ProductListSerializer(many=True)
+
+    class Meta:
+        model = Category
+        fields = ('id', 'name_category', 'parent_category', 'product')

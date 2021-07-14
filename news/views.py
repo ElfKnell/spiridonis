@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import NewsSerializer
+from .serializers import NewsSerializer, NewsListSerializer
 from users.permissions import IsEditorUser
 from .models import News
 
@@ -11,11 +11,11 @@ class NewsCreateView(generics.CreateAPIView):
 
 
 class NewsListView(generics.ListAPIView):
-    serializer_class = NewsSerializer
+    serializer_class = NewsListSerializer
     queryset = News.objects.all()
 
 
 class NewsDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = NewsSerializer
+    serializer_class = NewsListSerializer
     queryset = News.objects.all()
     permission_classes = [IsEditorUser, ]

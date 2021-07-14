@@ -52,7 +52,7 @@ class Product(models.Model):
     related_products = models.ManyToManyField('self', blank=True)
     manufacturer = models.ForeignKey(Manufacturer, blank=True, null=True, on_delete=models.SET_NULL)
 
-    category = models.ManyToManyField(Category, blank=True)
+    category = models.ManyToManyField(Category, blank=True, related_name='product')
     users = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
