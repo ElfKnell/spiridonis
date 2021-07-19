@@ -10,7 +10,6 @@ from .serializers import ProductSerializers, ProductDetailSerializers, ProductLi
     ProductListDropshipperSerializer, ProductDetailCustomerSerializers
 from users.permissions import IsEditorUser
 from .models import Product
-from rating.service import get_client_ip
 
 
 class ProductCreateView(generics.CreateAPIView):
@@ -43,7 +42,7 @@ class ProductListView(generics.ListAPIView):
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
 
-    queryset = Product.objects.all()
+    #queryset = Product.objects.all()
     queryset = Product.objects.annotate(middle_star=Round(Avg('rating__star')))
 
     def get_serializer_class(self):

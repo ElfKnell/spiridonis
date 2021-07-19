@@ -1,6 +1,8 @@
+from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import SetSerializer
+from .serializers import SetSerializer, SetListCustomerSerializer, SetListWholesalerSerializer, \
+    SetListRetailWholesalerSerializer, SetListDropshipperSerializer
 from .models import Set
 
 
@@ -10,9 +12,21 @@ class SetCreateView(generics.CreateAPIView):
 
 
 class SetListView(generics.ListAPIView):
-    serializer_class = SetSerializer
+
     queryset = Set.objects.all()
-    permission_classes = []
+
+    def get_serializer_class(self):
+        if isinstance(self.request.user, AnonymousUser):
+            return SetListCustomerSerializer
+        else:
+            if self.request.user.role == 3:
+                return SetListCustomerSerializer
+            if self.request.user.role == 4:
+                return SetListWholesalerSerializer
+            if self.request.user.role == 5:
+                return SetListRetailWholesalerSerializer
+            if self.request.user.role == 6:
+                return SetListDropshipperSerializer
 
 
 class SetDetailView(generics.RetrieveUpdateDestroyAPIView):

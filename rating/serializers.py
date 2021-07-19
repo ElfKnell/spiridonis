@@ -30,3 +30,10 @@ class RatingListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = '__all__'
+
+
+class RatingStarSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Rating
+        fields = ('star', )

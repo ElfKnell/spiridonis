@@ -1,9 +1,11 @@
+from django.db.models import Avg
+from django.db.models.functions import Round
 from rest_framework import serializers
 from .models import Product
 from attibutes.serializers import AttributeValueCustomerListSerializer, \
     AttributeValueWholesalerListSerializer, AttributeValueRetailWholesalerListSerializer, \
     AttributeValueDropshipperListSerializer, AttributeValueListSerializer, AttributeValueAllListSerializer
-from rating.serializers import RatingListSerializer
+from rating.serializers import RatingListSerializer, RatingStarSerializer
 
 
 class ProductSerializers(serializers.ModelSerializer):
@@ -27,11 +29,13 @@ class ProductListSerializer(serializers.ModelSerializer):
 class ProductListCustomerSerializer(serializers.ModelSerializer):
     attributes = AttributeValueListSerializer(many=True)
     middle_star = serializers.IntegerField(default=0)
+    rating = RatingStarSerializer(many=True)
+    #middle_star = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = ('id', 'name_product', 'article', 'photo', 'price',
-                  'sale_price', 'attributes', 'middle_star')
+                  'sale_price', 'attributes', 'rating', 'middle_star')
 
 
 class ProductListWholesalerSerializer(serializers.ModelSerializer):
