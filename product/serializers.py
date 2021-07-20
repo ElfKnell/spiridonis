@@ -42,7 +42,7 @@ class ProductListCustomerSerializer(serializers.ModelSerializer):
 
 class ProductListWholesalerSerializer(serializers.ModelSerializer):
     attributes = AttributeValueListSerializer(many=True)
-    middle_star = serializers.IntegerField(default=0)
+    middle_star = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -59,7 +59,7 @@ class ProductListWholesalerSerializer(serializers.ModelSerializer):
 
 class ProductListRetailWholesalerSerializer(serializers.ModelSerializer):
     attributes = AttributeValueListSerializer(many=True)
-    middle_star = serializers.IntegerField(default=0)
+    middle_star = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -76,7 +76,7 @@ class ProductListRetailWholesalerSerializer(serializers.ModelSerializer):
 
 class ProductListDropshipperSerializer(serializers.ModelSerializer):
     attributes = AttributeValueListSerializer(many=True)
-    middle_star = serializers.IntegerField(default=0)
+    middle_star = serializers.SerializerMethodField()
 
     class Meta:
         model = Product

@@ -20,6 +20,8 @@ class Set(models.Model):
                                      null=True, decimal_places=2, max_digits=10)
     drop_price = models.DecimalField(verbose_name='Sale price', blank=True,
                                      null=True, decimal_places=2, max_digits=10)
+    date_create = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name_set
