@@ -1,5 +1,3 @@
-from django.db.models import Avg
-from django.db.models.functions import Round
 from rest_framework import serializers
 from .models import Product
 from attibutes.serializers import AttributeValueCustomerListSerializer, \
@@ -18,7 +16,6 @@ class ProductSerializers(serializers.ModelSerializer):
 # Відображення каталога товарів
 class ProductListSerializer(serializers.ModelSerializer):
     attributes = AttributeValueAllListSerializer(many=True)
-    middle_star = serializers.IntegerField(default=0)
     rating = RatingListSerializer(many=True)
 
     class Meta:
@@ -28,14 +25,19 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 class ProductListCustomerSerializer(serializers.ModelSerializer):
     attributes = AttributeValueListSerializer(many=True)
-    middle_star = serializers.IntegerField(default=0)
-    rating = RatingStarSerializer(many=True)
-    #middle_star = serializers.SerializerMethodField()
+    middle_star = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = ('id', 'name_product', 'article', 'photo', 'price',
-                  'sale_price', 'attributes', 'rating', 'middle_star')
+                  'sale_price', 'attributes', 'middle_star')
+
+    def get_middle_star(self, obj):
+        value_star = obj.rating.all().values_list('star', flat=True)
+        count_star = obj.rating.count()
+        if count_star:
+            return round(sum(list(value_star))/count_star)
+        return obj.rating.count()
 
 
 class ProductListWholesalerSerializer(serializers.ModelSerializer):
@@ -47,6 +49,13 @@ class ProductListWholesalerSerializer(serializers.ModelSerializer):
         fields = ('id', 'name_product', 'article', 'photo', 'opt_price',
                   'attributes', 'middle_star')
 
+    def get_middle_star(self, obj):
+        value_star = obj.rating.all().values_list('star', flat=True)
+        count_star = obj.rating.count()
+        if count_star:
+            return round(sum(list(value_star))/count_star)
+        return obj.rating.count()
+
 
 class ProductListRetailWholesalerSerializer(serializers.ModelSerializer):
     attributes = AttributeValueListSerializer(many=True)
@@ -57,6 +66,13 @@ class ProductListRetailWholesalerSerializer(serializers.ModelSerializer):
         fields = ('id', 'name_product', 'article', 'photo', 'small_opt_price',
                   'attributes', 'middle_star')
 
+    def get_middle_star(self, obj):
+        value_star = obj.rating.all().values_list('star', flat=True)
+        count_star = obj.rating.count()
+        if count_star:
+            return round(sum(list(value_star))/count_star)
+        return obj.rating.count()
+
 
 class ProductListDropshipperSerializer(serializers.ModelSerializer):
     attributes = AttributeValueListSerializer(many=True)
@@ -66,6 +82,13 @@ class ProductListDropshipperSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('id', 'name_product', 'article', 'photo',
                   'drop_price', 'attributes', 'middle_star')
+
+    def get_middle_star(self, obj):
+        value_star = obj.rating.all().values_list('star', flat=True)
+        count_star = obj.rating.count()
+        if count_star:
+            return round(sum(list(value_star))/count_star)
+        return obj.rating.count()
 #Кінець відображення каталогу товарів
 
 

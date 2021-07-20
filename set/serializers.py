@@ -23,6 +23,10 @@ class SetListCustomerSerializer(serializers.ModelSerializer):
 
 
 class SetListWholesalerSerializer(serializers.ModelSerializer):
+    main_product = ProductListCustomerSerializer(read_only=True)
+    product_1 = ProductListCustomerSerializer(read_only=True)
+    product_2 = ProductListCustomerSerializer(read_only=True)
+    product_3 = ProductListCustomerSerializer(read_only=True)
 
     class Meta:
         model = Set
@@ -30,6 +34,10 @@ class SetListWholesalerSerializer(serializers.ModelSerializer):
 
 
 class SetListRetailWholesalerSerializer(serializers.ModelSerializer):
+    main_product = ProductListCustomerSerializer(read_only=True)
+    product_1 = ProductListCustomerSerializer(read_only=True)
+    product_2 = ProductListCustomerSerializer(read_only=True)
+    product_3 = ProductListCustomerSerializer(read_only=True)
 
     class Meta:
         model = Set
@@ -37,6 +45,10 @@ class SetListRetailWholesalerSerializer(serializers.ModelSerializer):
 
 
 class SetListDropshipperSerializer(serializers.ModelSerializer):
+    main_product = ProductListCustomerSerializer(read_only=True)
+    product_1 = ProductListCustomerSerializer(read_only=True)
+    product_2 = ProductListCustomerSerializer(read_only=True)
+    product_3 = ProductListCustomerSerializer(read_only=True)
 
     class Meta:
         model = Set

@@ -22,7 +22,7 @@ class ProductListView(generics.ListAPIView):
     filter_backends = [SearchFilter, ]
     search_fields = ['name_product', 'model', 'article', ]
     pagination_by = 25
-    queryset = Product.objects.annotate(middle_star=Round(Avg('rating__star')))
+    queryset = Product.objects.all()
 
     def get_serializer_class(self):
         if isinstance(self.request.user, AnonymousUser):
@@ -42,7 +42,6 @@ class ProductListView(generics.ListAPIView):
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
 
-    #queryset = Product.objects.all()
     queryset = Product.objects.annotate(middle_star=Round(Avg('rating__star')))
 
     def get_serializer_class(self):
