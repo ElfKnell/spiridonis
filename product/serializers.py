@@ -23,7 +23,17 @@ class ProductListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProductListCustomerSerializer(serializers.ModelSerializer):
+# Винесення спільного методу для списку продуктів
+class ProductBase:
+    def get_middle_star(self, obj):
+        value_star = obj.rating.all().values_list('star', flat=True)
+        count_star = obj.rating.count()
+        if count_star:
+            return round(sum(list(value_star))/count_star)
+        return obj.rating.count()
+
+
+class ProductListCustomerSerializer(serializers.ModelSerializer, ProductBase):
     attributes = AttributeValueListSerializer(many=True)
     middle_star = serializers.SerializerMethodField()
 
@@ -32,15 +42,8 @@ class ProductListCustomerSerializer(serializers.ModelSerializer):
         fields = ('id', 'name_product', 'article', 'photo', 'price',
                   'sale_price', 'attributes', 'middle_star')
 
-    def get_middle_star(self, obj):
-        value_star = obj.rating.all().values_list('star', flat=True)
-        count_star = obj.rating.count()
-        if count_star:
-            return round(sum(list(value_star))/count_star)
-        return obj.rating.count()
 
-
-class ProductListWholesalerSerializer(serializers.ModelSerializer):
+class ProductListWholesalerSerializer(serializers.ModelSerializer, ProductBase):
     attributes = AttributeValueListSerializer(many=True)
     middle_star = serializers.SerializerMethodField()
 
@@ -49,15 +52,8 @@ class ProductListWholesalerSerializer(serializers.ModelSerializer):
         fields = ('id', 'name_product', 'article', 'photo', 'opt_price',
                   'attributes', 'middle_star')
 
-    def get_middle_star(self, obj):
-        value_star = obj.rating.all().values_list('star', flat=True)
-        count_star = obj.rating.count()
-        if count_star:
-            return round(sum(list(value_star))/count_star)
-        return obj.rating.count()
 
-
-class ProductListRetailWholesalerSerializer(serializers.ModelSerializer):
+class ProductListRetailWholesalerSerializer(serializers.ModelSerializer, ProductBase):
     attributes = AttributeValueListSerializer(many=True)
     middle_star = serializers.SerializerMethodField()
 
@@ -66,15 +62,8 @@ class ProductListRetailWholesalerSerializer(serializers.ModelSerializer):
         fields = ('id', 'name_product', 'article', 'photo', 'small_opt_price',
                   'attributes', 'middle_star')
 
-    def get_middle_star(self, obj):
-        value_star = obj.rating.all().values_list('star', flat=True)
-        count_star = obj.rating.count()
-        if count_star:
-            return round(sum(list(value_star))/count_star)
-        return obj.rating.count()
 
-
-class ProductListDropshipperSerializer(serializers.ModelSerializer):
+class ProductListDropshipperSerializer(serializers.ModelSerializer, ProductBase):
     attributes = AttributeValueListSerializer(many=True)
     middle_star = serializers.SerializerMethodField()
 
@@ -82,17 +71,10 @@ class ProductListDropshipperSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('id', 'name_product', 'article', 'photo',
                   'drop_price', 'attributes', 'middle_star')
-
-    def get_middle_star(self, obj):
-        value_star = obj.rating.all().values_list('star', flat=True)
-        count_star = obj.rating.count()
-        if count_star:
-            return round(sum(list(value_star))/count_star)
-        return obj.rating.count()
-#Кінець відображення каталогу товарів
+# Кінець відображення каталогу товарів
 
 
-#Відображення окремого товару
+# Відображення окремого товару
 class ProductDetailSerializers(serializers.ModelSerializer):
 
     class Meta:
@@ -138,4 +120,4 @@ class ProductDetailDropshipperSerializer(serializers.ModelSerializer):
         model = Product
         exclude = ('date_create', 'updated_on', 'users', 'opt_price', 'small_opt_price',
                    'price', 'sale_price', 'is_new', 'is_sale', 'is_variability', 'status', 'count')
-#Кінець відображення окремого товару
+# Кінець відображення окремого товару
