@@ -6,7 +6,7 @@ from product.models import Product
 class Set(models.Model):
     name_set = models.CharField(verbose_name='Set name', max_length=20, unique=True)
     description = models.TextField(verbose_name='Description')
-    photo = models.CharField(verbose_name='Photo', max_length=120)
+    photo = models.CharField(verbose_name='Photo', max_length=120, blank=True, null=True)
     main_product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='main')
     product_1 = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='first')
     product_2 = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='second', blank=True, null=True)

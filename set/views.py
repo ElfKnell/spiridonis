@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render
 from rest_framework import generics
+from rest_framework.filters import SearchFilter
 
 from users.permissions import IsEditorUser
 from .serializers import SetSerializer, SetListCustomerSerializer, SetListWholesalerSerializer, \
@@ -14,7 +15,9 @@ class SetCreateView(generics.CreateAPIView):
 
 
 class SetListView(generics.ListAPIView):
-
+    pagination_by = 20
+    filter_backends = [SearchFilter, ]
+    search_fields = ['name_set', ]
     queryset = Set.objects.all()
 
     def get_serializer_class(self):

@@ -2,8 +2,10 @@ from django.contrib.auth.models import AnonymousUser
 from django.db.models import Avg
 from django.db.models.functions import Round
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import SearchFilter
+from .filter import PriceFilter
 
 from .serializers import ProductSerializers, ProductDetailSerializers, ProductListSerializer, \
     ProductListCustomerSerializer, ProductListWholesalerSerializer, ProductListRetailWholesalerSerializer, \
@@ -19,8 +21,9 @@ class ProductCreateView(generics.CreateAPIView):
 
 class ProductListView(generics.ListAPIView):
     serializer_class = ProductListSerializer
-    filter_backends = [SearchFilter, ]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['name_product', 'model', 'article', ]
+    filterset_class = PriceFilter
     pagination_by = 25
     queryset = Product.objects.all()
 
