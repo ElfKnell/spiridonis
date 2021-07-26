@@ -34,7 +34,7 @@ class ProductBase:
 
 
 class ProductListCustomerSerializer(serializers.ModelSerializer, ProductBase):
-    attributes = AttributeValueListSerializer(many=True)
+    attributes = AttributeValueCustomerListSerializer(many=True)
     middle_star = serializers.SerializerMethodField()
 
     class Meta:

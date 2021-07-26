@@ -16,7 +16,7 @@ from .models import Product
 
 class ProductCreateView(generics.CreateAPIView):
     serializer_class = ProductSerializers
-    permission_classes = [IsEditorUser]
+    #permission_classes = [IsEditorUser]
 
 
 class ProductListView(generics.ListAPIView):
@@ -29,7 +29,7 @@ class ProductListView(generics.ListAPIView):
 
     def get_serializer_class(self):
         if isinstance(self.request.user, AnonymousUser):
-            return ProductListCustomerSerializer
+            return ProductListSerializer
         else:
             if self.request.user.role == 2:
                 return ProductListSerializer

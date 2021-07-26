@@ -10,6 +10,7 @@ ROLE_CHOICES = (
     (4, 'wholesaler'),
     (5, 'retail wholesaler'),
     (6, 'dropshipper'),
+    (7, 'admin')
 )
 
 
@@ -24,5 +25,5 @@ class CustomUser(AbstractUser):
     )
     # Свойство `USERNAME_FIELD` сообщает нам, какое поле мы будем использовать для входа.
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'phone', 'first_name', 'last_name', 'role', 'company']
+    REQUIRED_FIELDS = ['username', 'phone', 'first_name', 'last_name', 'role', 'company_user']
 

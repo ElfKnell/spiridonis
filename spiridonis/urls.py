@@ -36,5 +36,6 @@ urlpatterns = [
     path('api/v1/reviews/', include('reviews.urls')),
     path('api/v1/rating/', include('rating.urls')),
     path('api/v1/company/', include('company.urls')),
-    path('api/v1/news/', include('news.urls'))
+    path('api/v1/news/', include('news.urls')),
+    path('api/v1/basket/', include('basket.urls'))
 ]

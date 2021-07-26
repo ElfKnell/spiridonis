@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'rating',
     'company',
     'news',
+    'basket',
 ]
 
 MIDDLEWARE = [
