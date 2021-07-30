@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from product.models import Product
+from vproduct.models import VProduct
 
 User = get_user_model()
 
@@ -23,6 +24,7 @@ PAYMENT_CHOICE = (
 class Basket(models.Model):
     count = models.IntegerField(verbose_name='Count', default=1)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    vproduct = models.ForeignKey(VProduct, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f"{self.product.name_product}"

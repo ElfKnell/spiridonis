@@ -7,7 +7,8 @@ from basket.serializers import BasketSerializer, BasketCreateSerializer, BasketD
     OrderSerializer, \
     OrderDetailCustomerSerializer, SelectionSerializer, SelectionListSerializer, OrderDetailWholesalerSerializer, \
     OrderDetailRetailWholesalerSerializer, OrderDetailDropshipperSerializer, BasketDetailWholesalerSerializer, \
-    BasketDetailRetailWholesalerSerializer, BasketDetailDropshipperSerializer, SelectionDetailSerializer
+    BasketDetailRetailWholesalerSerializer, BasketDetailDropshipperSerializer, SelectionDetailSerializer, \
+    OrderCreateSerializer
 from users.permissions import IsEditorUser
 from .models import Basket, Order, Selection
 from .paginations import LargeResultsSetPagination
@@ -43,19 +44,8 @@ class BasketDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 # Замовлення
 class OrderCreateView(generics.CreateAPIView):
-
-    def get_serializer_class(self):
-        if isinstance(self.request.user, AnonymousUser):
-            return OrderDetailCustomerSerializer
-        else:
-            if self.request.user.role == 3:
-                return OrderDetailCustomerSerializer
-            if self.request.user.role == 4:
-                return OrderDetailWholesalerSerializer
-            if self.request.user.role == 5:
-                return OrderDetailRetailWholesalerSerializer
-            if self.request.user.role == 6:
-                return OrderDetailDropshipperSerializer
+    serializer_class = OrderCreateSerializer
+    permission_classes = [permissions.IsAuthenticated, ]
 
 
 class OrderListView(generics.ListAPIView):
@@ -63,12 +53,13 @@ class OrderListView(generics.ListAPIView):
     queryset = Order.objects.all()
     pagination_class = LargeResultsSetPagination
     serializer_class = OrderSerializer
+    permission_classes = [IsEditorUser, ]
 
 
 class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Order.objects.all()
-    permission_classes = [IsEditorUser, ]
+    #permission_classes = [IsEditorUser, ]
 
     def get_serializer_class(self):
         if isinstance(self.request.user, AnonymousUser):
@@ -95,6 +86,7 @@ class SelectionCreateView(generics.CreateAPIView):
 class SelectionListView(generics.ListAPIView):
     serializer_class = SelectionListSerializer
     queryset = Selection.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class SelectionDetailView(generics.RetrieveUpdateDestroyAPIView):
