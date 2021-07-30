@@ -80,17 +80,17 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
 # Улюблені
 class SelectionCreateView(generics.CreateAPIView):
     serializer_class = SelectionSerializer
-    permission_classes = [permissions.IsAuthenticated, ]
+    #permission_classes = [permissions.IsAuthenticated, ]
 
 
 class SelectionListView(generics.ListAPIView):
     serializer_class = SelectionListSerializer
     queryset = Selection.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
 
 
 class SelectionDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SelectionDetailSerializer
     queryset = Selection.objects.all()
-    permission_classes = [permissions.IsAuthenticated, ]
+    #permission_classes = [permissions.IsAuthenticated, ]
 

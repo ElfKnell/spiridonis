@@ -43,5 +43,6 @@ class Order(models.Model):
 
 class Selection(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    vproduct = models.ForeignKey(VProduct, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     date_create = models.DateTimeField(auto_now_add=True)

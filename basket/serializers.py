@@ -12,23 +12,40 @@ class BasketBaseSerializer:
         return obj.product.name_product
 
     def get_article(self, obj):
-        return obj.product.article
+        if obj.product.is_variability:
+            return obj.vproduct.article
+        else:
+            return obj.product.article
 
     def get_photo(self, obj):
         return obj.product.photo
 
     def get_price(self, obj):
-        if obj.user.role == 3:
-            if obj.product.sale_price is None:
-                return obj.product.price
-            else:
-                return obj.product.sale_price
-        if obj.user.role == 4:
-            return obj.product.opt_price
-        if obj.user.role == 5:
-            return obj.product.small_opt_price
-        if obj.user.role == 6:
-            return obj.product.drop_price
+        if obj.product.is_variability:
+
+            if obj.user.role == 3:
+                if obj.vproduct.sale_price is None:
+                    return obj.vproduct.price
+                else:
+                    return obj.vproduct.sale_price
+            if obj.user.role == 4:
+                return obj.vproduct.opt_price
+            if obj.user.role == 5:
+                return obj.vproduct.small_opt_price
+            if obj.user.role == 6:
+                return obj.vproduct.drop_price
+        else:
+            if obj.user.role == 3:
+                if obj.product.sale_price is None:
+                    return obj.product.price
+                else:
+                    return obj.product.sale_price
+            if obj.user.role == 4:
+                return obj.product.opt_price
+            if obj.user.role == 5:
+                return obj.product.small_opt_price
+            if obj.user.role == 6:
+                return obj.product.drop_price
 
 
 class BasketSerializer(serializers.ModelSerializer):
