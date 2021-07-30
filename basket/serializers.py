@@ -2,7 +2,6 @@ from rest_framework import serializers
 from basket.models import Basket, Order, Selection
 from product.serializers import ProductListCustomerSerializer, ProductListWholesalerSerializer, \
     ProductListRetailWholesalerSerializer, ProductListDropshipperSerializer
-from users.serializers import CustomUserListSerializer
 from vproduct.serializers import VProductCustomerSerializer, VProductWholesalerSerializer, \
     VProductRetailWholesalerSerializer, VProductDropshipperSerializer
 
@@ -356,6 +355,7 @@ class OrderDetailDropshipperSerializer(serializers.ModelSerializer):
 # Кінець
 
 
+# Додавання в улюблені товари
 class SelectionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -382,4 +382,5 @@ class SelectionDetailSerializer(serializers.ModelSerializer, BasketBaseSerialize
 
     class Meta:
         model = Selection
-        fields = ['product', 'article', 'price', 'photo']
+        fields = '__all__'
+        read_only_fields = ('user', 'vproduct')

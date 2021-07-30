@@ -1,5 +1,4 @@
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import F, Sum
 from django.shortcuts import render
 from rest_framework import generics, permissions
 
@@ -40,6 +39,7 @@ class BasketDetailView(generics.RetrieveUpdateDestroyAPIView):
                 return BasketDetailRetailWholesalerSerializer
             if self.request.user.role == 6:
                 return BasketDetailDropshipperSerializer
+# Кінець кошика
 
 
 # Замовлення
@@ -59,7 +59,7 @@ class OrderListView(generics.ListAPIView):
 class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Order.objects.all()
-    #permission_classes = [IsEditorUser, ]
+    permission_classes = [IsEditorUser, ]
 
     def get_serializer_class(self):
         if isinstance(self.request.user, AnonymousUser):
@@ -75,18 +75,19 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
                 return OrderDetailRetailWholesalerSerializer
             if self.request.user.role == 6:
                 return OrderDetailDropshipperSerializer
+# Кінець замовлення
 
 
 # Улюблені
 class SelectionCreateView(generics.CreateAPIView):
     serializer_class = SelectionSerializer
-    #permission_classes = [permissions.IsAuthenticated, ]
+    permission_classes = [permissions.IsAuthenticated, ]
 
 
 class SelectionListView(generics.ListAPIView):
     serializer_class = SelectionListSerializer
     queryset = Selection.objects.all()
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class SelectionDetailView(generics.RetrieveUpdateDestroyAPIView):
