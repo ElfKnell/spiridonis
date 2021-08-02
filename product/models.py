@@ -30,7 +30,7 @@ class Product(models.Model):
     description = models.TextField(verbose_name='Description', blank=True, null=True)
     meta_description = models.CharField(verbose_name='Meta-description', max_length=120,
                                         blank=True, null=True)
-    photo = models.CharField(verbose_name='Photo', blank=True, null=True, max_length=120)
+    photo = models.ImageField(verbose_name='Photo', blank=True, null=True, upload_to='product_photo')
     price = models.DecimalField(verbose_name='Price', blank=True, null=True, decimal_places=2, max_digits=10)
     opt_price = models.DecimalField(verbose_name='Opt price', blank=True, null=True,
                                     decimal_places=2, max_digits=10)

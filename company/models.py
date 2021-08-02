@@ -6,7 +6,7 @@ User = get_user_model()
 class Company(models.Model):
     name_company = models.CharField(verbose_name='Name company', max_length=20, unique=True)
     description = models.TextField(verbose_name='Description', null=True)
-    logo = models.CharField(verbose_name='Logo', max_length=120)
+    logo = models.ImageField(verbose_name='Logo', blank=True, null=True, upload_to='logo')
     phone = models.CharField(verbose_name='Phone', max_length=13, unique=True)
     email = models.EmailField(verbose_name='Email')
     address = models.CharField(verbose_name='Address', null=True, max_length=150)

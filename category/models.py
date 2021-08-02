@@ -6,7 +6,7 @@ User = get_user_model()
 class Category(models.Model):
 
     name_category = models.CharField(verbose_name='Name', max_length=30, unique=True)
-    photo = models.CharField(verbose_name='Photo', max_length=150, null=True)
+    photo = models.ImageField(verbose_name='Photo', null=True, blank=True, upload_to='images')
     description = models.TextField(verbose_name='Description')
     title = models.CharField(verbose_name='Title', max_length=30)
     status = models.BooleanField(verbose_name='Status', default=True)
