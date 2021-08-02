@@ -93,5 +93,5 @@ class SelectionListView(generics.ListAPIView):
 class SelectionDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SelectionDetailSerializer
     queryset = Selection.objects.all()
-    #permission_classes = [permissions.IsAuthenticated, ]
+    permission_classes = [permissions.IsAuthenticated, ]
 

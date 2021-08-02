@@ -17,7 +17,8 @@ class BasketBaseSerializer:
             return obj.product.article
 
     def get_photo(self, obj):
-        return obj.product.photo
+        photo = 'http://127.0.0.1:8000/media/' + str(obj.product.photo)
+        return photo
 
     def get_price(self, obj):
         if obj.product.is_variability:
