@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AnonymousUser
-from django.shortcuts import render
 from rest_framework import generics
-from .serializers import CompanySerializer, CompanyListSerializer
+from .serializers import CompanySerializer, CompanyListSerializer, CompanyListUkSerializer, CompanyListRuSerializer
 from .models import Company
 from users.permissions import IsEditorUser
 
@@ -18,10 +17,18 @@ class CompanyListView(generics.ListAPIView):
 
     def get_serializer_class(self):
         if isinstance(self.request.user, AnonymousUser):
+            if 'uk' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                return CompanyListUkSerializer
+            elif 'ru' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                return CompanyListRuSerializer
             return CompanyListSerializer
         if self.request.user.role == 2:
             return CompanySerializer
         else:
+            if 'uk' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                return CompanyListUkSerializer
+            elif 'ru' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                return CompanyListRuSerializer
             return CompanyListSerializer
 
 
@@ -32,8 +39,16 @@ class CompanyDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_serializer_class(self):
         if isinstance(self.request.user, AnonymousUser):
+            if 'uk' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                return CompanyListUkSerializer
+            elif 'ru' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                return CompanyListRuSerializer
             return CompanyListSerializer
         if self.request.user.role == 2:
             return CompanySerializer
         else:
+            if 'uk' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                return CompanyListUkSerializer
+            elif 'ru' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                return CompanyListRuSerializer
             return CompanyListSerializer

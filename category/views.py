@@ -1,13 +1,13 @@
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import Avg
-from django.db.models.functions import Round
-from django.shortcuts import render
 from rest_framework import generics
 
-from product.models import Product
 from .serializers import CategorySerializer, CategoryDetailSerializer, CategoryListSerializer, \
     CategoryCustomerDetailSerializer, CategoryWholesalerDetailSerializer, \
-    CategoryRetailWholesalerDetailSerializer, CategoryDropshipperDetailSerializer
+    CategoryRetailWholesalerDetailSerializer, CategoryDropshipperDetailSerializer, CategoryListUkSerializer, \
+    CategoryListRUSerializer, CategoryCustomerUkDetailSerializer, CategoryCustomerRuDetailSerializer, \
+    CategoryDropshipperRuDetailSerializer, CategoryDropshipperUkDetailSerializer, CategoryWholesalerUkDetailSerializer, \
+    CategoryWholesalerRuDetailSerializer, CategoryRetailWholesalerUkDetailSerializer, \
+    CategoryRetailWholesalerRuDetailSerializer
 from .models import Category
 from users.permissions import IsEditorUser
 
@@ -21,23 +21,45 @@ class CategoryListView(generics.ListAPIView):
     serializer_class = CategoryListSerializer
     queryset = Category.objects.all()
 
+    def get_serializer_class(self):
+        if 'uk' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+            return CategoryListUkSerializer
+        elif 'ru' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+            return CategoryListRUSerializer
+        return CategoryListSerializer
+
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Category.objects.all()
     permission_classes = [IsEditorUser]
+    lookup_field = 'slug'
 
     def get_serializer_class(self):
-        if isinstance(self.request.user, AnonymousUser):
+        if isinstance(self.request.user, AnonymousUser) or self.request.user.role == 3:
+            if 'uk' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                return CategoryCustomerUkDetailSerializer
+            elif 'ru' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                return CategoryCustomerRuDetailSerializer
             return CategoryCustomerDetailSerializer
         else:
             if self.request.user.role == 2:
                 return CategoryDetailSerializer
-            if self.request.user.role == 3:
-                return CategoryCustomerDetailSerializer
-            if self.request.user.role == 4:
+            elif self.request.user.role == 4:
+                if 'uk' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                    return CategoryWholesalerUkDetailSerializer
+                elif 'ru' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                    return CategoryWholesalerRuDetailSerializer
                 return CategoryWholesalerDetailSerializer
-            if self.request.user.role == 5:
+            elif self.request.user.role == 5:
+                if 'uk' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                    return CategoryRetailWholesalerUkDetailSerializer
+                elif 'ru' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                    return CategoryRetailWholesalerRuDetailSerializer
                 return CategoryRetailWholesalerDetailSerializer
-            if self.request.user.role == 6:
+            elif self.request.user.role == 6:
+                if 'uk' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                    return CategoryDropshipperUkDetailSerializer
+                elif 'ru' in self.request.META.get('HTTP_ACCEPT_LANGUAGE'):
+                    return CategoryDropshipperRuDetailSerializer
                 return CategoryDropshipperDetailSerializer

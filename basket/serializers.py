@@ -1,26 +1,48 @@
 from rest_framework import serializers
 from basket.models import Basket, Order, Selection
 from product.serializers import ProductListCustomerSerializer, ProductListWholesalerSerializer, \
-    ProductListRetailWholesalerSerializer, ProductListDropshipperSerializer
+    ProductListRetailWholesalerSerializer, ProductListDropshipperSerializer, ProductUkListCustomerSerializer, \
+    ProductRuListCustomerSerializer, ProductUkListWholesalerSerializer, ProductRuListWholesalerSerializer, \
+    ProductUkListRetailWholesalerSerializer, ProductRuListRetailWholesalerSerializer, \
+    ProductUkListDropshipperSerializer, ProductRuListDropshipperSerializer
 from vproduct.serializers import VProductCustomerSerializer, VProductWholesalerSerializer, \
     VProductRetailWholesalerSerializer, VProductDropshipperSerializer
 
 
-class BasketBaseSerializer:
-    def get_product(self, obj):
+class SelectionEnBase:
+    @staticmethod
+    def get_product(obj):
         return obj.product.name_product
 
-    def get_article(self, obj):
+
+class SelectionUkBase:
+    @staticmethod
+    def get_product(obj):
+        return obj.product.name_product_uk
+
+
+class SelectionRuBase:
+    @staticmethod
+    def get_product(obj):
+        return obj.product.name_product_ru
+
+
+class BasketBaseSerializer:
+
+    @staticmethod
+    def get_article(obj):
         if obj.product.is_variability:
             return obj.vproduct.article
         else:
             return obj.product.article
 
-    def get_photo(self, obj):
+    @staticmethod
+    def get_photo(obj):
         photo = 'http://127.0.0.1:8000/media/' + str(obj.product.photo)
         return photo
 
-    def get_price(self, obj):
+    @staticmethod
+    def get_price(obj):
         if obj.product.is_variability:
 
             if obj.user.role == 3:
@@ -63,70 +85,43 @@ class BasketCreateSerializer(serializers.ModelSerializer):
 
 
 # Детялі по кошику для різних покупців
-class BasketDetailCustomerSerializer(serializers.ModelSerializer):
-    product = serializers.SerializerMethodField()
-    vproduct = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Basket
-        fields = ['product', 'count', 'vproduct']
-
-    def get_product(self, obj):
-        if obj.product.is_variability:
-            return obj.product.name_product
-        else:
-            return ProductListCustomerSerializer(obj.product, read_only=True).data
-
-    def get_vproduct(self, obj):
+class BasketDetailCustomerBase:
+    @staticmethod
+    def get_vproduct(obj):
         if obj.product.is_variability:
             return VProductCustomerSerializer(obj.vproduct, read_only=True).data
         else:
             return None
 
 
-class BasketDetailWholesalerSerializer(serializers.ModelSerializer):
-    product = serializers.SerializerMethodField()
-    vproduct = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Basket
-        fields = ['product', 'count', 'vproduct']
-
-    def get_product(self, obj):
-        if obj.product.is_variability:
-            return obj.product.name_product
-        else:
-            return ProductListWholesalerSerializer(obj.product, read_only=True).data
-
-    def get_vproduct(self, obj):
+class BasketDetailWholesalerBase:
+    @staticmethod
+    def get_vproduct(obj):
         if obj.product.is_variability:
             return VProductWholesalerSerializer(obj.vproduct, read_only=True).data
         else:
             return None
 
 
-class BasketDetailRetailWholesalerSerializer(serializers.ModelSerializer):
-    product = serializers.SerializerMethodField()
-    vproduct = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Basket
-        fields = ['product', 'count', 'vproduct']
-
-    def get_product(self, obj):
-        if obj.product.is_variability:
-            return obj.product.name_product
-        else:
-            return ProductListRetailWholesalerSerializer(obj.product, read_only=True).data
-
-    def get_vproduct(self, obj):
+class BasketDetailRetailWholesalerBase:
+    @staticmethod
+    def get_vproduct(obj):
         if obj.product.is_variability:
             return VProductRetailWholesalerSerializer(obj.vproduct, read_only=True).data
         else:
             return None
 
 
-class BasketDetailDropshipperSerializer(serializers.ModelSerializer):
+class BasketDetailDropshipperSerializerBase:
+    @staticmethod
+    def get_vproduct(obj):
+        if obj.product.is_variability:
+            return VProductDropshipperSerializer(obj.vproduct, read_only=True).data
+        else:
+            return None
+
+
+class BasketDetailCustomerSerializer(serializers.ModelSerializer, BasketDetailCustomerBase):
     product = serializers.SerializerMethodField()
     vproduct = serializers.SerializerMethodField()
 
@@ -134,17 +129,188 @@ class BasketDetailDropshipperSerializer(serializers.ModelSerializer):
         model = Basket
         fields = ['product', 'count', 'vproduct']
 
-    def get_product(self, obj):
+    @staticmethod
+    def get_product(obj):
+        if obj.product.is_variability:
+            return obj.product.name_product
+        else:
+            return ProductListCustomerSerializer(obj.product, read_only=True).data
+
+
+class BasketDetailUkCustomerSerializer(serializers.ModelSerializer, BasketDetailCustomerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
+        if obj.product.is_variability:
+            return obj.product.name_product_uk
+        else:
+            return ProductUkListCustomerSerializer(obj.product, read_only=True).data
+
+
+class BasketDetailRuCustomerSerializer(serializers.ModelSerializer, BasketDetailCustomerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
+        if obj.product.is_variability:
+            return obj.product.name_product_ru
+        else:
+            return ProductRuListCustomerSerializer(obj.product, read_only=True).data
+
+
+class BasketDetailWholesalerSerializer(serializers.ModelSerializer, BasketDetailWholesalerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
+        if obj.product.is_variability:
+            return obj.product.name_product
+        else:
+            return ProductListWholesalerSerializer(obj.product, read_only=True).data
+
+
+class BasketDetailUkWholesalerSerializer(serializers.ModelSerializer, BasketDetailWholesalerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
+        if obj.product.is_variability:
+            return obj.product.name_product_uk
+        else:
+            return ProductUkListWholesalerSerializer(obj.product, read_only=True).data
+
+
+class BasketDetailRuWholesalerSerializer(serializers.ModelSerializer, BasketDetailWholesalerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
+        if obj.product.is_variability:
+            return obj.product.name_product_ru
+        else:
+            return ProductRuListWholesalerSerializer(obj.product, read_only=True).data
+
+
+class BasketDetailRetailWholesalerSerializer(serializers.ModelSerializer, BasketDetailRetailWholesalerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
+        if obj.product.is_variability:
+            return obj.product.name_product
+        else:
+            return ProductListRetailWholesalerSerializer(obj.product, read_only=True).data
+
+
+class BasketDetailUkRetailWholesalerSerializer(serializers.ModelSerializer, BasketDetailRetailWholesalerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
+        if obj.product.is_variability:
+            return obj.product.name_product_uk
+        else:
+            return ProductUkListRetailWholesalerSerializer(obj.product, read_only=True).data
+
+
+class BasketDetailRuRetailWholesalerSerializer(serializers.ModelSerializer, BasketDetailRetailWholesalerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
+        if obj.product.is_variability:
+            return obj.product.name_product_ru
+        else:
+            return ProductRuListRetailWholesalerSerializer(obj.product, read_only=True).data
+
+
+class BasketDetailDropshipperSerializer(serializers.ModelSerializer, BasketDetailDropshipperSerializerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
         if obj.product.is_variability:
             return obj.product.name_product
         else:
             return ProductListDropshipperSerializer(obj.product, read_only=True).data
 
-    def get_vproduct(self, obj):
+
+class BasketDetailUkDropshipperSerializer(serializers.ModelSerializer, BasketDetailDropshipperSerializerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
         if obj.product.is_variability:
-            return VProductDropshipperSerializer(obj.vproduct, read_only=True).data
+            return obj.product.name_product_uk
         else:
-            return None
+            return ProductUkListDropshipperSerializer(obj.product, read_only=True).data
+
+
+class BasketDetailRuDropshipperSerializer(serializers.ModelSerializer, BasketDetailDropshipperSerializerBase):
+    product = serializers.SerializerMethodField()
+    vproduct = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Basket
+        fields = ['product', 'count', 'vproduct']
+
+    @staticmethod
+    def get_product(obj):
+        if obj.product.is_variability:
+            return obj.product.name_product_ru
+        else:
+            return ProductRuListDropshipperSerializer(obj.product, read_only=True).data
 # Кінець деталей по кошику
 
 
@@ -156,6 +322,20 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         fields = ['number_order', 'basket', 'user', 'type_payment']
 
 
+class OrderCreateUkSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = ['number_order', 'basket', 'user', 'type_payment_uk']
+
+
+class OrderCreateRuSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = ['number_order', 'basket', 'user', 'type_payment_ru']
+
+
 class OrderSerializer(serializers.ModelSerializer):
 
     basket = serializers.SerializerMethodField()
@@ -164,7 +344,8 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
-    def get_basket(self, obj):
+    @staticmethod
+    def get_basket(obj):
         if obj.user.role == 3:
             queryset = obj.basket.all()
             return BasketDetailCustomerSerializer(queryset, many=True).data
@@ -180,16 +361,10 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 # Деталі замовлень по користувачам
-class OrderDetailCustomerSerializer(serializers.ModelSerializer):
-
-    basket = BasketDetailCustomerSerializer(many=True, read_only=False)
-    grand_total = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Order
-        fields = '__all__'
-
-    def get_grand_total(self, obj):
+# Класи для обрахунку
+class OrderDetailCustomBase:
+    @staticmethod
+    def get_grand_total(obj):
         count = obj.basket.all().values_list('count', flat=True)
         price = list(obj.basket.all().values_list('product__price', flat=True))
         sale_price = list(obj.basket.all().values_list('product__sale_price', flat=True))
@@ -238,16 +413,9 @@ class OrderDetailCustomerSerializer(serializers.ModelSerializer):
             return summa
 
 
-class OrderDetailWholesalerSerializer(serializers.ModelSerializer):
-
-    basket = BasketDetailWholesalerSerializer(many=True, read_only=True)
-    grand_total = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Order
-        fields = '__all__'
-
-    def get_grand_total(self, obj):
+class OrderDetailWholesalerBase:
+    @staticmethod
+    def get_grand_total(obj):
         count = obj.basket.all().values_list('count', flat=True)
         price = obj.basket.all().values_list('product__opt_price', flat=True)
         is_variant = list(obj.basket.all().values_list('product__is_variability', flat=True))
@@ -277,16 +445,9 @@ class OrderDetailWholesalerSerializer(serializers.ModelSerializer):
         return summa
 
 
-class OrderDetailRetailWholesalerSerializer(serializers.ModelSerializer):
-
-    basket = BasketDetailRetailWholesalerSerializer(many=True, read_only=True)
-    grand_total = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Order
-        fields = '__all__'
-
-    def get_grand_total(self, obj):
+class OrderDetailRetailWholesalerBase:
+    @staticmethod
+    def get_grand_total(obj):
         count = obj.basket.all().values_list('count', flat=True)
         price = obj.basket.all().values_list('product__small_opt_price', flat=True)
         is_variant = list(obj.basket.all().values_list('product__is_variability', flat=True))
@@ -316,16 +477,9 @@ class OrderDetailRetailWholesalerSerializer(serializers.ModelSerializer):
         return summa
 
 
-class OrderDetailDropshipperSerializer(serializers.ModelSerializer):
-
-    basket = BasketDetailDropshipperSerializer(many=True, read_only=True)
-    grand_total = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Order
-        fields = '__all__'
-
-    def get_grand_total(self, obj):
+class OrderDetailDropshipperBase:
+    @staticmethod
+    def get_grand_total(obj):
         count = obj.basket.all().values_list('count', flat=True)
         price = obj.basket.all().values_list('product__drop_price', flat=True)
         is_variant = list(obj.basket.all().values_list('product__is_variability', flat=True))
@@ -353,6 +507,139 @@ class OrderDetailDropshipperSerializer(serializers.ModelSerializer):
 
         summa = round(sum(l_summa), 2)
         return summa
+# Кінець класыв для обрахунку
+
+
+class OrderDetailCustomerSerializer(serializers.ModelSerializer, OrderDetailCustomBase):
+
+    basket = BasketDetailCustomerSerializer(many=True, read_only=False)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status', 'date_create', 'date_update', 'type_payment',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailCustomerUkSerializer(serializers.ModelSerializer, OrderDetailCustomBase):
+
+    basket = BasketDetailUkCustomerSerializer(many=True, read_only=False)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status_uk', 'date_create', 'date_update', 'type_payment_uk',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailCustomerRuSerializer(serializers.ModelSerializer, OrderDetailCustomBase):
+
+    basket = BasketDetailRuCustomerSerializer(many=True, read_only=False)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status_ru', 'date_create', 'date_update', 'type_payment_ru',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailWholesalerSerializer(serializers.ModelSerializer, OrderDetailWholesalerBase):
+
+    basket = BasketDetailWholesalerSerializer(many=True, read_only=True)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status', 'date_create', 'date_update', 'type_payment',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailWholesalerUkSerializer(serializers.ModelSerializer, OrderDetailWholesalerBase):
+
+    basket = BasketDetailUkWholesalerSerializer(many=True, read_only=True)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status_uk', 'date_create', 'date_update', 'type_payment_uk',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailWholesalerRuSerializer(serializers.ModelSerializer, OrderDetailWholesalerBase):
+
+    basket = BasketDetailRuWholesalerSerializer(many=True, read_only=True)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status_ru', 'date_create', 'date_update', 'type_payment_ru',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailRetailWholesalerSerializer(serializers.ModelSerializer, OrderDetailRetailWholesalerBase):
+
+    basket = BasketDetailRetailWholesalerSerializer(many=True, read_only=True)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status', 'date_create', 'date_update', 'type_payment',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailRetailWholesalerUkSerializer(serializers.ModelSerializer, OrderDetailRetailWholesalerBase):
+
+    basket = BasketDetailUkRetailWholesalerSerializer(many=True, read_only=True)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status_uk', 'date_create', 'date_update', 'type_payment_uk',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailRetailWholesalerRuSerializer(serializers.ModelSerializer, OrderDetailRetailWholesalerBase):
+
+    basket = BasketDetailRuRetailWholesalerSerializer(many=True, read_only=True)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status_ru', 'date_create', 'date_update', 'type_payment_ru',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailDropshipperSerializer(serializers.ModelSerializer, OrderDetailDropshipperBase):
+
+    basket = BasketDetailDropshipperSerializer(many=True, read_only=True)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status', 'date_create', 'date_update', 'type_payment',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailDropshipperUkSerializer(serializers.ModelSerializer, OrderDetailDropshipperBase):
+
+    basket = BasketDetailUkDropshipperSerializer(many=True, read_only=True)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status_uk', 'date_create', 'date_update', 'type_payment_uk',
+                  'user', 'sale', 'grand_total')
+
+
+class OrderDetailDropshipperRuSerializer(serializers.ModelSerializer, OrderDetailDropshipperBase):
+
+    basket = BasketDetailRuDropshipperSerializer(many=True, read_only=True)
+    grand_total = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('basket', 'number_order', 'status_ru', 'date_create', 'date_update', 'type_payment_ru',
+                  'user', 'sale', 'grand_total')
 # Кінець
 
 
@@ -364,7 +651,7 @@ class SelectionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SelectionListSerializer(serializers.ModelSerializer, BasketBaseSerializer):
+class SelectionListSerializer(serializers.ModelSerializer, BasketBaseSerializer, SelectionEnBase):
     article = serializers.SerializerMethodField()
     product = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
@@ -375,7 +662,7 @@ class SelectionListSerializer(serializers.ModelSerializer, BasketBaseSerializer)
         fields = '__all__'
 
 
-class SelectionDetailSerializer(serializers.ModelSerializer, BasketBaseSerializer):
+class SelectionListUkSerializer(serializers.ModelSerializer, BasketBaseSerializer, SelectionUkBase):
     article = serializers.SerializerMethodField()
     product = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
@@ -384,4 +671,14 @@ class SelectionDetailSerializer(serializers.ModelSerializer, BasketBaseSerialize
     class Meta:
         model = Selection
         fields = '__all__'
-        read_only_fields = ('user', 'vproduct')
+
+
+class SelectionListRuSerializer(serializers.ModelSerializer, BasketBaseSerializer, SelectionRuBase):
+    article = serializers.SerializerMethodField()
+    product = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
+    photo = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Selection
+        fields = '__all__'

@@ -10,7 +10,6 @@ STATUS_CHOICE = [
 
 class VProduct(models.Model):
     article = models.CharField(verbose_name='Article', max_length=30)
-    description = models.TextField(verbose_name='Description', blank=True, null=True)
     price = models.DecimalField(verbose_name='Price', blank=True, null=True, decimal_places=2, max_digits=10)
     opt_price = models.DecimalField(verbose_name='Opt price', blank=True, null=True,
                                     decimal_places=2, max_digits=10)

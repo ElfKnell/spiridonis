@@ -6,5 +6,5 @@ app_name = 'Set'
 urlpatterns = [
     path('create/', SetCreateView.as_view()),
     path('all', SetListView.as_view()),
-    path('detail/<int:pk>', SetDetailView.as_view())
+    path('detail/<str:slug>', SetDetailView.as_view())
 ]

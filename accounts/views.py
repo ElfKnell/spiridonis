@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView)
 from rest_framework.permissions import IsAdminUser
 from .models import UserProfile
@@ -19,3 +20,7 @@ class UserProfileDetailView(RetrieveUpdateDestroyAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsOwnerProfileOrReadOnly, ]
+
+
+def index(request):
+    return render(request, 'index.html', {})

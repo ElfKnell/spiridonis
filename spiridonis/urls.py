@@ -18,6 +18,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from accounts.views import index
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path to djoser end points
@@ -26,6 +28,7 @@ urlpatterns = [
 
     # path to our account's app endpoints
     path('api/v1/accounts/', include('accounts.urls')),
+    path('', index),
 
     path('api/v1/users/', include('users.urls')),
     path('api/v1/category/', include('category.urls')),

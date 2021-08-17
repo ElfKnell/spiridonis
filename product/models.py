@@ -12,22 +12,51 @@ User = get_user_model()
 SEX_CHOICES = [
     (0, 'children'),
     (1, 'man'),
-    (2, 'woman')
+    (2, 'woman'),
+    (3, 'unisex')
+]
+SEX_CHOICES_UK = [
+    (0, 'дитячі'),
+    (1, 'чоловічі'),
+    (2, 'жіночі'),
+    (3, 'унісекс')
+]
+SEX_CHOICES_RU = [
+    (0, 'детские'),
+    (1, 'мужские'),
+    (2, 'женские'),
+    (3, 'унисекс')
 ]
 STATUS_CHOICE = [
     (0, 'is available'),
     (1, 'not available'),
     (2, 'in order')
 ]
+STATUS_CHOICE_UK = [
+    (0, 'в наявності'),
+    (1, 'немає в наявності'),
+    (2, 'під замовлення')
+]
+STATUS_CHOICE_RU = [
+    (0, 'в наличии'),
+    (1, 'нет в наличии'),
+    (2, 'под заказ')
+]
 
 
 class Product(models.Model):
 
     name_product = models.CharField(verbose_name='Name', unique=True, max_length=30)
+    name_product_uk = models.CharField(verbose_name='Назва', unique=True, max_length=30,
+                                       null=True, blank=True)
+    name_product_ru = models.CharField(verbose_name='Название', unique=True, max_length=30,
+                                       null=True, blank=True)
     title = models.CharField(verbose_name='Title', max_length=30, unique=True)
-    model = models.CharField(verbose_name='Model', max_length=30, unique=True)
     article = models.CharField(verbose_name='Article', max_length=30, unique=True)
+    slug = models.SlugField(verbose_name='Part of the link', max_length=30, unique=True)
     description = models.TextField(verbose_name='Description', blank=True, null=True)
+    description_uk = models.TextField(verbose_name='Опис', blank=True, null=True)
+    description_ru = models.TextField(verbose_name='Описание', blank=True, null=True)
     meta_description = models.CharField(verbose_name='Meta-description', max_length=120,
                                         blank=True, null=True)
     photo = models.ImageField(verbose_name='Photo', blank=True, null=True, upload_to='product_photo')
@@ -46,7 +75,11 @@ class Product(models.Model):
     is_variability = models.BooleanField(verbose_name='Variability', default=False)
 
     sex = models.IntegerField(verbose_name='Sex', default=2, choices=SEX_CHOICES)
+    sex_uk = models.IntegerField(verbose_name='Стать', default=2, choices=SEX_CHOICES_UK)
+    sex_ru = models.IntegerField(verbose_name='Пол', default=2, choices=SEX_CHOICES_RU)
     status = models.IntegerField(verbose_name='Status', default=0, choices=STATUS_CHOICE)
+    status_uk = models.IntegerField(verbose_name='Статус', default=0, choices=STATUS_CHOICE_UK)
+    status_ru = models.IntegerField(verbose_name='Статус', default=0, choices=STATUS_CHOICE_RU)
     date_create = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     related_products = models.ManyToManyField('self', blank=True)
@@ -56,4 +89,4 @@ class Product(models.Model):
     users = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.name_product
+        return f"{self.name_product}-{self.name_product_uk}-{self.name_product_ru}"

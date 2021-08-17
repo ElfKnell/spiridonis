@@ -2,8 +2,12 @@ from rest_framework import serializers
 from .models import Product
 from attibutes.serializers import AttributeValueCustomerListSerializer, \
     AttributeValueWholesalerListSerializer, AttributeValueRetailWholesalerListSerializer, \
-    AttributeValueDropshipperListSerializer, AttributeValueListSerializer, AttributeValueAllListSerializer
-from rating.serializers import RatingListSerializer, RatingStarSerializer
+    AttributeValueDropshipperListSerializer, AttributeValueListSerializer, AttributeValueAllListSerializer, \
+    AttributeValueCustomerUkListSerializer, AttributeValueCustomerRuListSerializer, AttributeValueUkListSerializer, \
+    AttributeValueRuListSerializer, AttributeValueWholesalerUkListSerializer, AttributeValueWholesalerRuListSerializer, \
+    AttributeValueRetailWholesalerUkListSerializer, AttributeValueRetailWholesalerRuListSerializer, \
+    AttributeValueDropshipperRuListSerializer, AttributeValueDropshipperUkListSerializer
+from rating.serializers import RatingListSerializer
 
 
 class ProductSerializers(serializers.ModelSerializer):
@@ -40,7 +44,27 @@ class ProductListCustomerSerializer(serializers.ModelSerializer, ProductBase):
     class Meta:
         model = Product
         fields = ('id', 'name_product', 'article', 'photo', 'price',
-                  'sale_price', 'attributes', 'middle_star')
+                  'sale_price', 'attributes', 'middle_star', 'slug')
+
+
+class ProductUkListCustomerSerializer(serializers.ModelSerializer, ProductBase):
+    attributes = AttributeValueCustomerUkListSerializer(many=True)
+    middle_star = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product_uk', 'article', 'photo', 'price',
+                  'sale_price', 'attributes', 'middle_star', 'slug')
+
+
+class ProductRuListCustomerSerializer(serializers.ModelSerializer, ProductBase):
+    attributes = AttributeValueCustomerRuListSerializer(many=True)
+    middle_star = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product_ru', 'article', 'photo', 'price',
+                  'sale_price', 'attributes', 'middle_star', 'slug')
 
 
 class ProductListWholesalerSerializer(serializers.ModelSerializer, ProductBase):
@@ -50,7 +74,27 @@ class ProductListWholesalerSerializer(serializers.ModelSerializer, ProductBase):
     class Meta:
         model = Product
         fields = ('id', 'name_product', 'article', 'photo', 'opt_price',
-                  'attributes', 'middle_star')
+                  'attributes', 'middle_star', 'slug')
+
+
+class ProductUkListWholesalerSerializer(serializers.ModelSerializer, ProductBase):
+    attributes = AttributeValueUkListSerializer(many=True)
+    middle_star = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product_uk', 'article', 'photo', 'opt_price',
+                  'attributes', 'middle_star', 'slug')
+
+
+class ProductRuListWholesalerSerializer(serializers.ModelSerializer, ProductBase):
+    attributes = AttributeValueRuListSerializer(many=True)
+    middle_star = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product_ru', 'article', 'photo', 'opt_price',
+                  'attributes', 'middle_star', 'slug')
 
 
 class ProductListRetailWholesalerSerializer(serializers.ModelSerializer, ProductBase):
@@ -60,7 +104,27 @@ class ProductListRetailWholesalerSerializer(serializers.ModelSerializer, Product
     class Meta:
         model = Product
         fields = ('id', 'name_product', 'article', 'photo', 'small_opt_price',
-                  'attributes', 'middle_star')
+                  'attributes', 'middle_star', 'slug')
+
+
+class ProductUkListRetailWholesalerSerializer(serializers.ModelSerializer, ProductBase):
+    attributes = AttributeValueUkListSerializer(many=True)
+    middle_star = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product_uk', 'article', 'photo', 'small_opt_price',
+                  'attributes', 'middle_star', 'slug')
+
+
+class ProductRuListRetailWholesalerSerializer(serializers.ModelSerializer, ProductBase):
+    attributes = AttributeValueRuListSerializer(many=True)
+    middle_star = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product_ru', 'article', 'photo', 'small_opt_price',
+                  'attributes', 'middle_star', 'slug')
 
 
 class ProductListDropshipperSerializer(serializers.ModelSerializer, ProductBase):
@@ -70,7 +134,27 @@ class ProductListDropshipperSerializer(serializers.ModelSerializer, ProductBase)
     class Meta:
         model = Product
         fields = ('id', 'name_product', 'article', 'photo',
-                  'drop_price', 'attributes', 'middle_star')
+                  'drop_price', 'attributes', 'middle_star', 'slug')
+
+
+class ProductUkListDropshipperSerializer(serializers.ModelSerializer, ProductBase):
+    attributes = AttributeValueUkListSerializer(many=True)
+    middle_star = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product_uk', 'article', 'photo',
+                  'drop_price', 'attributes', 'middle_star', 'slug')
+
+
+class ProductRuListDropshipperSerializer(serializers.ModelSerializer, ProductBase):
+    attributes = AttributeValueRuListSerializer(many=True)
+    middle_star = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name_product_ru', 'article', 'photo',
+                  'drop_price', 'attributes', 'middle_star', 'slug')
 # Кінець відображення каталогу товарів
 
 
@@ -88,8 +172,31 @@ class ProductDetailCustomerSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        exclude = ('date_create', 'updated_on', 'users', 'opt_price', 'small_opt_price',
-                   'drop_price', 'is_new', 'is_variability', 'status', 'count')
+        fields = ('name_product', 'title', 'article', 'description', 'meta_description', 'photo',
+                  'price', 'sale_price', 'is_sale', 'sex', 'status', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
+
+
+class ProductUkDetailCustomerSerializers(serializers.ModelSerializer):
+    attributes = AttributeValueCustomerUkListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('name_product_uk', 'title', 'article', 'description_uk', 'meta_description', 'photo',
+                  'price', 'sale_price', 'is_sale', 'sex_uk', 'status_uk', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
+
+
+class ProductRuDetailCustomerSerializers(serializers.ModelSerializer):
+    attributes = AttributeValueCustomerRuListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('name_product_ru', 'title', 'article', 'description_ru', 'meta_description', 'photo',
+                  'price', 'sale_price', 'is_sale', 'sex_ru', 'status_ru', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
 
 
 class ProductDetailWholesalerSerializer(serializers.ModelSerializer):
@@ -98,8 +205,31 @@ class ProductDetailWholesalerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        exclude = ('date_create', 'updated_on', 'users', 'price', 'small_opt_price',
-                   'drop_price', 'sale_price', 'is_new', 'is_sale', 'is_variability', 'status', 'count')
+        fields = ('name_product', 'title', 'article', 'description', 'meta_description', 'photo',
+                  'opt_price', 'sex', 'status', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
+
+
+class ProductUkDetailWholesalerSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueWholesalerUkListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('name_product_uk', 'title', 'article', 'description_uk', 'meta_description', 'photo',
+                  'opt_price', 'sex_uk', 'status_uk', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
+
+
+class ProductRuDetailWholesalerSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueWholesalerRuListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('name_product_ru', 'title', 'article', 'description_ru', 'meta_description', 'photo',
+                  'opt_price', 'sex_ru', 'status_ru', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
 
 
 class ProductDetailRetailWholesalerSerializer(serializers.ModelSerializer):
@@ -108,8 +238,31 @@ class ProductDetailRetailWholesalerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        exclude = ('date_create', 'updated_on', 'users', 'opt_price', 'price',
-                   'drop_price', 'sale_price', 'is_new', 'is_sale', 'is_variability', 'status', 'count')
+        fields = ('name_product', 'title', 'article', 'description', 'meta_description', 'photo',
+                  'small_opt_price', 'sex', 'status', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
+
+
+class ProductUkDetailRetailWholesalerSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueRetailWholesalerUkListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('name_product_uk', 'title', 'article', 'description_uk', 'meta_description', 'photo',
+                  'small_opt_price', 'sex_uk', 'status_uk', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
+
+
+class ProductRuDetailRetailWholesalerSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueRetailWholesalerRuListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('name_product_ru', 'title', 'article', 'description_ru', 'meta_description', 'photo',
+                  'small_opt_price', 'sex_ru', 'status_ru', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
 
 
 class ProductDetailDropshipperSerializer(serializers.ModelSerializer):
@@ -118,6 +271,29 @@ class ProductDetailDropshipperSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        exclude = ('date_create', 'updated_on', 'users', 'opt_price', 'small_opt_price',
-                   'price', 'sale_price', 'is_new', 'is_sale', 'is_variability', 'status', 'count')
+        fields = ('name_product', 'title', 'article', 'description', 'meta_description', 'photo',
+                  'drop_price', 'sex', 'status', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
+
+
+class ProductUkDetailDropshipperSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueDropshipperUkListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('name_product_uk', 'title', 'article', 'description_uk', 'meta_description', 'photo',
+                  'drop_price', 'sex_uk', 'status_uk', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
+
+
+class ProductRuDetailDropshipperSerializer(serializers.ModelSerializer):
+    attributes = AttributeValueDropshipperRuListSerializer(many=True)
+    middle_star = serializers.IntegerField(default=0)
+
+    class Meta:
+        model = Product
+        fields = ('name_product_ru', 'title', 'article', 'description_ru', 'meta_description', 'photo',
+                  'drop_price', 'sex_ru', 'status_ru', 'related_products', 'manufacturer',
+                  'category', 'attributes', 'middle_star')
 # Кінець відображення окремого товару

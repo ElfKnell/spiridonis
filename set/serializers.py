@@ -1,7 +1,10 @@
 from rest_framework import serializers
 
 from product.serializers import ProductListCustomerSerializer, ProductListWholesalerSerializer, \
-    ProductListRetailWholesalerSerializer, ProductListDropshipperSerializer, ProductListSerializer
+    ProductListRetailWholesalerSerializer, ProductListDropshipperSerializer, ProductListSerializer, \
+    ProductUkListCustomerSerializer, ProductRuListCustomerSerializer, ProductUkListWholesalerSerializer, \
+    ProductRuListWholesalerSerializer, ProductUkListRetailWholesalerSerializer, ProductRuListRetailWholesalerSerializer, \
+    ProductUkListDropshipperSerializer, ProductRuListDropshipperSerializer
 from .models import Set
 
 
@@ -21,7 +24,32 @@ class SetListCustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Set
-        exclude = ('opt_price', 'small_opt_price', 'drop_price', 'date_create', 'updated_on')
+        exclude = ('opt_price', 'small_opt_price', 'drop_price', 'date_create', 'updated_on',
+                   'name_set_uk', 'name_set_ru', 'description_uk', 'description_ru')
+
+
+class SetListUkCustomerSerializer(serializers.ModelSerializer):
+    main_product = ProductUkListCustomerSerializer(read_only=True)
+    product_1 = ProductUkListCustomerSerializer(read_only=True)
+    product_2 = ProductUkListCustomerSerializer(read_only=True)
+    product_3 = ProductUkListCustomerSerializer(read_only=True)
+
+    class Meta:
+        model = Set
+        exclude = ('opt_price', 'small_opt_price', 'drop_price', 'date_create', 'updated_on',
+                   'name_set', 'name_set_ru', 'description', 'description_ru')
+
+
+class SetListRuCustomerSerializer(serializers.ModelSerializer):
+    main_product = ProductRuListCustomerSerializer(read_only=True)
+    product_1 = ProductRuListCustomerSerializer(read_only=True)
+    product_2 = ProductRuListCustomerSerializer(read_only=True)
+    product_3 = ProductRuListCustomerSerializer(read_only=True)
+
+    class Meta:
+        model = Set
+        exclude = ('opt_price', 'small_opt_price', 'drop_price', 'date_create', 'updated_on',
+                   'name_set_uk', 'name_set', 'description_uk', 'description')
 
 
 class SetListWholesalerSerializer(serializers.ModelSerializer):
@@ -32,7 +60,32 @@ class SetListWholesalerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Set
-        exclude = ('price', 'sale_price', 'small_opt_price', 'date_create', 'updated_on')
+        exclude = ('price', 'sale_price', 'small_opt_price', 'date_create', 'updated_on',
+                   'name_set_uk', 'name_set_ru', 'description_uk', 'description_ru', 'drop_price')
+
+
+class SetListUkWholesalerSerializer(serializers.ModelSerializer):
+    main_product = ProductUkListWholesalerSerializer(read_only=True)
+    product_1 = ProductUkListWholesalerSerializer(read_only=True)
+    product_2 = ProductUkListWholesalerSerializer(read_only=True)
+    product_3 = ProductUkListWholesalerSerializer(read_only=True)
+
+    class Meta:
+        model = Set
+        exclude = ('price', 'sale_price', 'small_opt_price', 'date_create', 'updated_on',
+                   'name_set', 'name_set_ru', 'description', 'description_ru', 'drop_price')
+
+
+class SetListRuWholesalerSerializer(serializers.ModelSerializer):
+    main_product = ProductRuListWholesalerSerializer(read_only=True)
+    product_1 = ProductRuListWholesalerSerializer(read_only=True)
+    product_2 = ProductRuListWholesalerSerializer(read_only=True)
+    product_3 = ProductRuListWholesalerSerializer(read_only=True)
+
+    class Meta:
+        model = Set
+        exclude = ('price', 'sale_price', 'small_opt_price', 'date_create', 'updated_on',
+                   'name_set_uk', 'name_set', 'description_uk', 'description', 'drop_price')
 
 
 class SetListRetailWholesalerSerializer(serializers.ModelSerializer):
@@ -43,7 +96,32 @@ class SetListRetailWholesalerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Set
-        exclude = ('price', 'sale_price', 'opt_price', 'drop_price', 'date_create', 'updated_on')
+        exclude = ('price', 'sale_price', 'opt_price', 'drop_price', 'date_create', 'updated_on',
+                   'name_set_uk', 'name_set_ru', 'description_uk', 'description_ru')
+
+
+class SetListUkRetailWholesalerSerializer(serializers.ModelSerializer):
+    main_product = ProductUkListRetailWholesalerSerializer(read_only=True)
+    product_1 = ProductUkListRetailWholesalerSerializer(read_only=True)
+    product_2 = ProductUkListRetailWholesalerSerializer(read_only=True)
+    product_3 = ProductUkListRetailWholesalerSerializer(read_only=True)
+
+    class Meta:
+        model = Set
+        exclude = ('price', 'sale_price', 'opt_price', 'drop_price', 'date_create', 'updated_on',
+                   'name_set', 'name_set_ru', 'description', 'description_ru')
+
+
+class SetListRuRetailWholesalerSerializer(serializers.ModelSerializer):
+    main_product = ProductRuListRetailWholesalerSerializer(read_only=True)
+    product_1 = ProductRuListRetailWholesalerSerializer(read_only=True)
+    product_2 = ProductRuListRetailWholesalerSerializer(read_only=True)
+    product_3 = ProductRuListRetailWholesalerSerializer(read_only=True)
+
+    class Meta:
+        model = Set
+        exclude = ('price', 'sale_price', 'opt_price', 'drop_price', 'date_create', 'updated_on',
+                   'name_set_uk', 'name_set', 'description_uk', 'description')
 
 
 class SetListDropshipperSerializer(serializers.ModelSerializer):
@@ -54,7 +132,32 @@ class SetListDropshipperSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Set
-        exclude = ('price', 'sale_price', 'small_opt_price', 'opt_price', 'date_create', 'updated_on')
+        exclude = ('price', 'sale_price', 'small_opt_price', 'opt_price', 'date_create', 'updated_on',
+                   'name_set_uk', 'name_set_ru', 'description_uk', 'description_ru')
+
+
+class SetListUkDropshipperSerializer(serializers.ModelSerializer):
+    main_product = ProductUkListDropshipperSerializer(read_only=True)
+    product_1 = ProductUkListDropshipperSerializer(read_only=True)
+    product_2 = ProductUkListDropshipperSerializer(read_only=True)
+    product_3 = ProductUkListDropshipperSerializer(read_only=True)
+
+    class Meta:
+        model = Set
+        exclude = ('price', 'sale_price', 'small_opt_price', 'opt_price', 'date_create', 'updated_on',
+                   'name_set', 'name_set_ru', 'description', 'description_ru')
+
+
+class SetListRuDropshipperSerializer(serializers.ModelSerializer):
+    main_product = ProductRuListDropshipperSerializer(read_only=True)
+    product_1 = ProductRuListDropshipperSerializer(read_only=True)
+    product_2 = ProductRuListDropshipperSerializer(read_only=True)
+    product_3 = ProductRuListDropshipperSerializer(read_only=True)
+
+    class Meta:
+        model = Set
+        exclude = ('price', 'sale_price', 'small_opt_price', 'opt_price', 'date_create', 'updated_on',
+                   'name_set_uk', 'name_set', 'description_uk', 'description')
 
 
 class SetListSerializer(serializers.ModelSerializer):
